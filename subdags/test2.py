@@ -14,9 +14,12 @@ def test2(parent_dag_name, start_date, schedule_interval, parent_dag=None):
     )
 
     if len(parent_dag.get_active_runs()) > 0:
-        test_list = parent_dag.get_task_instances(session=settings.Session, start_date=parent_dag.get_active_runs()[-1])[-1].xcom_pull(
+        try:
+            test_list = parent_dag.get_task_instances(session=settings.Session, start_date=parent_dag.get_active_runs()[-1])[-1].xcom_pull(
             dag_id='%s.%s' % (parent_dag_name, 'test1'),
             task_ids='list')
+        except IndexError:
+            task_list = None
         if test_list:
             for i in test_list:
                 test = DummyOperator(

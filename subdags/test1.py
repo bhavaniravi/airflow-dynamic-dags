@@ -24,7 +24,7 @@ def test1(parent_dag_name, start_date, schedule_interval):
 
     clean_xcoms = PostgresOperator(
         task_id='clean_xcoms',
-        postgres_conn_id='airflow_db',
+        postgres_conn_id='airflow',
         sql="delete from xcom where dag_id='{{ dag.dag_id }}'",
         dag=dag)
 
